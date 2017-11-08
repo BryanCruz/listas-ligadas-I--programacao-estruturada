@@ -153,9 +153,20 @@ void remove_um_v1(no *inicio, int item) {
 
 // 12. (EXERCÍCIO) Remove todos os nós contendo item.
 void remove_todos(no *inicio, int item){
-//
-//
-//
+  if (*inicio == NULL)
+    return;
+
+  no x, *prev = inicio;
+
+  while(){
+    for (x = (*inicio)->prox; x != NULL && x->item != item;
+         prev = &(x->prox), x = x->prox);
+
+    if (x != NULL) {
+      *prev = x->prox;
+      deleta(x);
+    }
+  }
 }
 
 // 13. (EXERCÍCIO) Remove todos os nós contendo item, recursivo.
@@ -274,6 +285,25 @@ int testa_insere_finalR(){
   imprime(inicio);
   return 0;
 }
+
+int testa_remove_todos(){
+  no inicio = NULL;
+
+  remove_todos(&inicio, 3);
+
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+  imprime(inicio);
+
+
+  remove_todos(&inicio, 3);
+  imprime(inicio);
+  return 0;
+}
 // Troque o corpo da função main para testar outras funções...
 int main() {
   imprimir_teste("inverteR");
@@ -292,5 +322,8 @@ int main() {
   testa_insere_finalR();
   printf("\n");
 
+  imprimir_teste("remove_todos");
+  testa_remove_todos();
+  printf("\n");
   return 0;
 }
