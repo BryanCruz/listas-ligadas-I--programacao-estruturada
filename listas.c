@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct s_no *   no;
+typedef struct s_no * no;
 
 struct s_no {
   int item;
@@ -75,17 +75,39 @@ no buscaR(no inicio, int item) {
 }
 
 // 8 (EXERCÍCIO) Devolve o último nó de uma lista.
-no final(no inicio);
+no final(no inicio){
+  if(inicio == NULL){
+    return NULL;
+  }
 
-// 9. (EXERCÍCIO) Insere nó no final. 
+  while(inicio->prox != NULL){
+    inicio = inicio->prox;
+  }
+  return inicio;
+}
+
+// 9. (EXERCÍCIO) Insere nó no final.
 //    (Supõem que x e inicio são ambos diferentes de NULL.)
 //    (Mas *inicio pode ser NULL.)
-void insere_final(no *inicio, no x);
+void insere_final(no *inicio, no x){
+  if(*inicio == NULL){
+    *inicio = x;
+  }else{
+    no y = final(*inicio);
+    y->prox = x;
+  }
+}
 
-// 10. (EXERCÍCIO) Insere nó no final, recursivamente. 
+// 10. (EXERCÍCIO) Insere nó no final, recursivamente.
 //    (Supõem que x e inicio são ambos diferentes de NULL.)
 //    (Mas *inicio pode ser NULL.)
-void insere_finalR(no *inicio, no x);
+void insere_finalR(no *inicio, no x){
+  if(*inicio == NULL){
+    *inicio = x;
+  }else{
+    insere_finalR(&((*inicio)->prox), x);
+  }
+}
 
 // 11. Remove primeiro nó que contém item.
 //    (Supõem que inicio é diferente de NULL.
@@ -93,7 +115,7 @@ void insere_finalR(no *inicio, no x);
 void remove_um(no *inicio, int item) {
   if (*inicio == NULL)
     return;
-  
+
   no x, *prev = inicio;
   for (x = (*inicio)->prox; x != NULL && x->item != item;
        prev = &(x->prox), x = x->prox);
@@ -103,15 +125,15 @@ void remove_um(no *inicio, int item) {
     deleta(x);
   }
 }
-  
+
 // 11. Remove primeiro nó que contém item.
 //     (Provavelmente a 1ª idéia que vem à mente.)
 void remove_um_v1(no *inicio, int item) {
   if (*inicio == NULL)
     return;
-  
+
   no x = *inicio, y;
-  
+
   if (x->item == item) {
     *inicio = x->prox;
     deleta(x);
@@ -120,7 +142,7 @@ void remove_um_v1(no *inicio, int item) {
 
   while (x->prox != NULL && x->prox->item != item)
     x = x->prox;
-  
+
   if (x->prox == NULL)
     return;
 
@@ -130,7 +152,8 @@ void remove_um_v1(no *inicio, int item) {
 }
 
 // 12. (EXERCÍCIO) Remove todos os nós contendo item.
-void remove_todos(no *inicio, int item);
+void remove_todos(no *inicio, int item){
+}
 
 // 13. (EXERCÍCIO) Remove todos os nós contendo item, recursivo.
 //     Este fica mais simples que o anterior.
@@ -174,6 +197,24 @@ void inverteR2(no *head);
 /****************************************************/
 /****************************************************/
 
+void imprimir_teste(char * nome){
+  printf("Testa %s\n", nome);
+}
+
+// Testa final
+int testa_final(){
+  no inicio = NULL;
+
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+
+  imprime(inicio);
+  printf("%d\n", final(inicio)->item);
+
+  return 0;
+}
+
 // Testa inverteR
 int testa_inverteR() {
   no head = NULL, tail;
@@ -183,7 +224,7 @@ int testa_inverteR() {
     if (i == 0)
       tail = head;
   }
-      
+
   imprime(head);
   inverteR(&head, &tail);
   imprime(head);
@@ -191,8 +232,64 @@ int testa_inverteR() {
   return 0;
 }
 
+int testa_insere_final(){
+  no inicio = NULL;
+  printf("teste 1:\n");
+  imprime(inicio);
 
+  no x1 = novo(-1);
+  insere_final(&inicio, x1);
+
+  imprime(inicio);
+
+  printf("\nteste 2:\n");
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+
+  no x2 = novo(-2);
+  insere_final(&inicio, x2);
+  imprime(inicio);
+  return 0;
+}
+
+int testa_insere_finalR(){
+  no inicio = NULL;
+  printf("teste 1:\n");
+  imprime(inicio);
+
+  no x1 = novo(-1);
+  insere_finalR(&inicio, x1);
+
+  imprime(inicio);
+
+  printf("\nteste 2:\n");
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+
+  no x2 = novo(-2);
+  insere_finalR(&inicio, x2);
+  imprime(inicio);
+  return 0;
+}
 // Troque o corpo da função main para testar outras funções...
 int main() {
-  return testa_inverteR();
+  imprimir_teste("inverteR");
+  testa_inverteR();
+  printf("\n");
+
+  imprimir_teste("final");
+  testa_final();
+  printf("\n");
+
+  imprimir_teste("insere_final");
+  testa_insere_final();
+  printf("\n");
+
+  imprimir_teste("insere_finalR");
+  testa_insere_finalR();
+  printf("\n");
+
+  return 0;
 }
