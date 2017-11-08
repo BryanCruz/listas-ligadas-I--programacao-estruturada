@@ -153,6 +153,7 @@ void remove_um_v1(no *inicio, int item) {
 
 // 12. (EXERCÍCIO) Remove todos os nós contendo item.
 void remove_todos(no *inicio, int item){
+//  
 }
 
 // 13. (EXERCÍCIO) Remove todos os nós contendo item, recursivo.
@@ -201,7 +202,6 @@ void imprimir_teste(char * nome){
   printf("Testa %s\n", nome);
 }
 
-// Testa final
 int testa_final(){
   no inicio = NULL;
 
@@ -215,7 +215,6 @@ int testa_final(){
   return 0;
 }
 
-// Testa inverteR
 int testa_inverteR() {
   no head = NULL, tail;
 
