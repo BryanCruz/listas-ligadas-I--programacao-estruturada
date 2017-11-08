@@ -153,7 +153,9 @@ void remove_um_v1(no *inicio, int item) {
 
 // 12. (EXERCÍCIO) Remove todos os nós contendo item.
 void remove_todos(no *inicio, int item){
-//  
+//
+//
+//
 }
 
 // 13. (EXERCÍCIO) Remove todos os nós contendo item, recursivo.
