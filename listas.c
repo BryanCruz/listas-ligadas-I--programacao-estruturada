@@ -112,16 +112,17 @@ void insere_finalR(no *inicio, no x){
 // 11. Remove primeiro nó que contém item.
 //    (Supõem que inicio é diferente de NULL.
 //    (*inicio pode ser NULL.)
+//    (EXERCÍCIO: entender o que a função faz.)
 void remove_um(no *inicio, int item) {
-  if (*inicio == NULL)
-    return;
+  no x = *inicio, *aux = inicio;
 
-  no x, *prev = inicio;
-  for (x = (*inicio)->prox; x != NULL && x->item != item;
-       prev = &(x->prox), x = x->prox);
+  while(x != NULL && x->item != item){
+    aux = &(x->prox);
+    x = x->prox;
+  }
 
-  if (x != NULL) {
-    *prev = x->prox;
+  if(x != NULL){
+    *aux = x->prox;
     deleta(x);
   }
 }
@@ -153,6 +154,8 @@ void remove_um_v1(no *inicio, int item) {
 
 // 12. (EXERCÍCIO) Remove todos os nós contendo item.
 void remove_todos(no *inicio, int item){
+
+
 }
 
 // 13. (EXERCÍCIO) Remove todos os nós contendo item, recursivo.
@@ -201,8 +204,7 @@ void imprimir_teste(char * nome){
   printf("Testa %s\n", nome);
 }
 
-// Testa final
-int testa_final(){
+void testa_final(){
   no inicio = NULL;
 
   for (int i = 0; i < 10; i++) {
@@ -212,11 +214,9 @@ int testa_final(){
   imprime(inicio);
   printf("%d\n", final(inicio)->item);
 
-  return 0;
 }
 
-// Testa inverteR
-int testa_inverteR() {
+void testa_inverteR() {
   no head = NULL, tail;
 
   for (int i = 0; i < 10; i ++) {
@@ -229,10 +229,9 @@ int testa_inverteR() {
   inverteR(&head, &tail);
   imprime(head);
 
-  return 0;
 }
 
-int testa_insere_final(){
+void testa_insere_final(){
   no inicio = NULL;
   printf("teste 1:\n");
   imprime(inicio);
@@ -250,10 +249,9 @@ int testa_insere_final(){
   no x2 = novo(-2);
   insere_final(&inicio, x2);
   imprime(inicio);
-  return 0;
 }
 
-int testa_insere_finalR(){
+void testa_insere_finalR(){
   no inicio = NULL;
   printf("teste 1:\n");
   imprime(inicio);
@@ -271,9 +269,62 @@ int testa_insere_finalR(){
   no x2 = novo(-2);
   insere_finalR(&inicio, x2);
   imprime(inicio);
-  return 0;
 }
-// Troque o corpo da função main para testar outras funções...
+
+void testa_remove_um(){
+  no inicio = NULL;
+  printf("remove null\n");
+  remove_um(&inicio, 3);
+
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+  imprime(inicio);
+
+  printf("remove 2 no meio\n");
+  remove_um(&inicio, 2);
+  imprime(inicio);
+
+  printf("remove 9 no inicio\n");
+  remove_um(&inicio, 9);
+  imprime(inicio);
+
+  printf("remove 0 no final\n");
+  remove_um(&inicio, 0);
+  imprime(inicio);
+
+  printf("nao remove 10\n");
+  remove_um(&inicio, 10);
+  imprime(inicio);
+}
+
+void testa_remove_um_v1(){
+  no inicio = NULL;
+  printf("remove null\n");
+  remove_um_v1(&inicio, 3);
+
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+  imprime(inicio);
+
+  printf("remove 2 no meio\n");
+  remove_um_v1(&inicio, 2);
+  imprime(inicio);
+
+  printf("remove 9 no inicio\n");
+  remove_um_v1(&inicio, 9);
+  imprime(inicio);
+
+  printf("remove 0 no final\n");
+  remove_um_v1(&inicio, 0);
+  imprime(inicio);
+
+  printf("nao remove 10\n");
+  remove_um_v1(&inicio, 10);
+  imprime(inicio);
+}
+
 int main() {
   imprimir_teste("inverteR");
   testa_inverteR();
@@ -289,6 +340,14 @@ int main() {
 
   imprimir_teste("insere_finalR");
   testa_insere_finalR();
+  printf("\n");
+
+  imprimir_teste("remove_um");
+  testa_remove_um();
+  printf("\n");
+
+  imprimir_teste("remove_um_v1");
+  testa_remove_um_v1();
   printf("\n");
 
   return 0;
