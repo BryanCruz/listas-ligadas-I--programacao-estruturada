@@ -238,18 +238,6 @@ void imprimir_teste(char * nome){
   printf("Testa %s\n", nome);
 }
 
-void testa_final(){
-  no inicio = NULL;
-
-  for (int i = 0; i < 10; i++) {
-    insere_inicio(&inicio, novo(i));
-  }
-
-  imprime(inicio);
-  printf("%d\n", final(inicio)->item);
-
-}
-
 void testa_inverteR() {
   no head = NULL, tail;
 
@@ -262,24 +250,34 @@ void testa_inverteR() {
   imprime(head);
   inverteR(&head, &tail);
   imprime(head);
+}
+
+void testa_final(){
+  no inicio = NULL;
+
+  for (int i = 0; i < 10; i++) {
+    insere_inicio(&inicio, novo(i));
+  }
+
+  imprime(inicio);
+  printf("%d\n", final(inicio)->item);
 
 }
 
 void testa_insere_final(){
   no inicio = NULL;
-  printf("teste 1:\n");
-  imprime(inicio);
 
+  printf("teste 1:\ninsere -1 em NULL:\n");
   no x1 = novo(-1);
   insere_final(&inicio, x1);
-
   imprime(inicio);
 
-  printf("\nteste 2:\n");
+  printf("teste 2:\n");
   for (int i = 0; i < 10; i++) {
     insere_inicio(&inicio, novo(i));
   }
-
+  imprime(inicio);
+  printf("insere -2\n");
   no x2 = novo(-2);
   insere_final(&inicio, x2);
   imprime(inicio);
@@ -287,19 +285,18 @@ void testa_insere_final(){
 
 void testa_insere_finalR(){
   no inicio = NULL;
-  printf("teste 1:\n");
-  imprime(inicio);
 
+  printf("teste 1:\ninsere -1 em NULL:\n");
   no x1 = novo(-1);
   insere_finalR(&inicio, x1);
-
   imprime(inicio);
 
-  printf("\nteste 2:\n");
+  printf("teste 2:\n");
   for (int i = 0; i < 10; i++) {
     insere_inicio(&inicio, novo(i));
   }
-
+  imprime(inicio);
+  printf("insere -2\n");
   no x2 = novo(-2);
   insere_finalR(&inicio, x2);
   imprime(inicio);
