@@ -1,0 +1,542 @@
+2a3
+> #include "lista.h"
+4,29c5,15
+< typedef struct s_no * no;
+< 
+< struct s_no {
+<   int item;
+<   no  prox;
+< };
+< 
+< // 1. Cria um novo nó da lista.
+< no novo(int item) {
+<   no x = (no) malloc(sizeof(struct s_no));
+< 
+<   if (x == NULL) {
+<     fprintf(stderr, "Memória insuficiente.\n");
+<     exit(1);
+<   }
+< 
+<   x->item = item;
+<   x->prox = NULL;
+< 
+<   return x;
+< }
+< 
+< // 2. Deleta um nó.
+< void deleta(no x) {
+<   free(x);
+< }
+---
+> // 1. (EXERCÍCIO) Cria um novo nó da lista.
+> //    Mudar a implementação da função novo
+> //    para alocar muitos nós de uma vez e usar a lista
+> //    livres para guardar os blocos que ainda não estão
+> //    sendo usados. Como visto em sala...
+> no novo(int item);
+> 
+> // 2. (EXERCÍCIO) Deleta um nó.
+> //    Adaptar a função deleta para trabalhar
+> //    com a lista de nós livres. Como visto em sala...
+> void deleta(no x);
+32,36c18,22
+< //    (Supõem que x e inicio são ambos diferentes de NULL.)
+< //    (Mas *inicio pode ser NULL.)
+< void insere_inicio(no *inicio, no x) {
+<   x->prox = *inicio;
+<   *inicio = x;
+---
+> //    (Supõem que x e ini são ambos diferentes de NULL.)
+> //    (Mas *ini pode ser NULL.)
+> void insere_inicio(no *ini, no x) {
+>   x->prox = *ini;
+>   *ini = x;
+42,45c28,31
+< void remove_inicio(no *inicio) {
+<   no x = *inicio;
+<   if (*inicio != NULL) {
+<     *inicio = x->prox;
+---
+> void remove_inicio(no *ini) {
+>   no x = *ini;
+>   if (*ini != NULL) {
+>     *ini = x->prox;
+52,55c38,40
+< void imprime(no inicio) {
+<   no x;
+<   for (no x = inicio; x != NULL; x = x->prox)
+<     printf("%d ", x->item);
+---
+> void imprime(no x) {
+>   for (; x != NULL; x = x->prox)
+>     printf("%d", x->item);
+77,79c62,64
+< // 8 (EXERCÍCIO) Devolve o último nó de uma lista.
+< no final(no inicio){
+<   if(inicio == NULL){
+---
+> // 8. Devolve o último nó de uma lista.
+> no final(no x) {
+>   if (x == NULL)
+81c66,71
+<   }
+---
+>   
+>   while (x->prox != NULL)
+>     x = x->prox;
+>   
+>   return x;
+> };
+83,84c73,79
+<   while(inicio->prox != NULL){
+<     inicio = inicio->prox;
+---
+> // 9. Insere nó no final. 
+> //    (Supõem que x e ini são ambos diferentes de NULL.)
+> //    (Mas *ini pode ser NULL.)
+> void insere_final(no *ini, no x) {
+>   if (*ini == NULL) {
+>     *ini = x;
+>     return;
+86,87d80
+<   return inicio;
+< }
+89,98c82,83
+< // 9. (EXERCÍCIO) Insere nó no final.
+< //    (Supõem que x e inicio são ambos diferentes de NULL.)
+< //    (Mas *inicio pode ser NULL.)
+< void insere_final(no *inicio, no x){
+<   if(*inicio == NULL){
+<     *inicio = x;
+<   }else{
+<     no y = final(*inicio);
+<     y->prox = x;
+<   }
+---
+>   no y = final(*ini);
+>   y->prox = x;
+100,109c85,93
+< 
+< // 10. (EXERCÍCIO) Insere nó no final, recursivamente.
+< //    (Supõem que x e inicio são ambos diferentes de NULL.)
+< //    (Mas *inicio pode ser NULL.)
+< void insere_finalR(no *inicio, no x){
+<   if(*inicio == NULL){
+<     *inicio = x;
+<   }else{
+<     insere_finalR(&((*inicio)->prox), x);
+<   }
+---
+>     
+> // 10. Insere nó no final, recursivamente. 
+> //    (Supõem que x e ini são ambos diferentes de NULL.)
+> //    (Mas *ini pode ser NULL.)
+> void insere_finalR(no *ini, no x) {
+>   if (*ini == NULL) 
+>     *ini = x;
+>   else
+>     insere_finalR(&((*ini)->prox), x);
+113,114c97,98
+< //    (Supõem que inicio é diferente de NULL.
+< //    (*inicio pode ser NULL.)
+---
+> //    (Supõem que ini é diferente de NULL.
+> //    (*ini pode ser NULL.)
+116,132c100,101
+< void remove_um(no *inicio, int item) {
+<   no x = *inicio, *aux = inicio;
+<   while(x != NULL && x->item != item){
+<     aux = &(x->prox);
+<     x = x->prox;
+<   }
+< 
+<   if(x != NULL){
+<     *aux = x->prox;
+<     deleta(x);
+<   }
+< }
+< 
+< // 11. Remove primeiro nó que contém item.
+< //     (Provavelmente a 1ª idéia que vem à mente.)
+< void remove_um_v1(no *inicio, int item) {
+<   if (*inicio == NULL)
+---
+> void remove_um(no *ini, int item) {
+>   if (*ini == NULL)
+133a103,106
+>   
+>   no x, *prev = ini;
+>   for (x = (*ini); x != NULL && x->item != item;
+>        prev = &(x->prox), x = x->prox);
+135,138c108,109
+<   no x = *inicio, y;
+< 
+<   if (x->item == item) {
+<     *inicio = x->prox;
+---
+>   if (x != NULL) {
+>     *prev = x->prox;
+140d110
+<     return;
+142,151d111
+< 
+<   while (x->prox != NULL && x->prox->item != item)
+<     x = x->prox;
+< 
+<   if (x->prox == NULL)
+<     return;
+< 
+<   y = x->prox;
+<   x->prox = y->prox;
+<   deleta(y);
+155,170c115
+< void remove_todos(no *inicio, int item){
+<   //x é copia, *aux é referencia, aux é cópia da referencia
+<   no x = *inicio, *aux = inicio;
+< 
+<   while(x != NULL){
+<     if(x->item == item){
+<       *aux = x->prox;
+<       deleta(x);
+< 
+<       x = *aux;
+<     }else{
+<       aux = &(x->prox);
+<       x = x->prox;
+<     }
+<   }
+< }
+---
+> void remove_todos(no *ini, int item);
+174,184c119
+< void remove_todosR(no *inicio, int item){
+<   if(*inicio != NULL){
+<     no x = *inicio;
+<     remove_todosR(&(x->prox), item);
+< 
+<     if(x->item == item){
+<        *inicio = x->prox;
+<        deleta(x);
+<     }
+<   }
+< }
+---
+> void remove_todosR(no *ini, int item);
+186c121
+< // 14. (EXERCÍCIO) Cria uma cópia da lista dada
+---
+> // 14. Cria uma cópia da lista dada
+188,189c123,125
+< no copia(no inicio){
+<   no inicioCopia = NULL;
+---
+> no copia(no inicio) {
+>   if (inicio == NULL)
+>     return NULL;
+191,200c127,129
+<   if(inicio != NULL){
+<     inicioCopia = novo(inicio->item);
+<     inicio = inicio->prox;
+< 
+<     while(inicio != NULL){
+<       insere_final(&inicioCopia, novo(inicio->item));
+<       inicio = inicio->prox;
+<     }
+<   }
+<   return inicioCopia;
+---
+>   no x = novo(inicio->item);
+>   x->prox = copia(inicio->prox);
+>   return x;
+204,211c133,141
+< void inverte(no *inicio) {
+<   no inv = NULL, x = *inicio;
+< 
+<   while (*inicio != NULL) {
+<     x = *inicio;
+<     *inicio = (*inicio)->prox;
+<     x->prox = inv;
+<     inv = x;
+---
+> void inverte(no *ini) {
+>   no x = *ini;
+>   *ini = NULL;
+>   
+>   while (x != NULL) {
+>     no y = x->prox;
+>     x->prox = *ini;
+>     *ini = x;
+>     x = y;    
+213,225d142
+< 
+<   *inicio = x;
+< }
+< 
+< // 16. Função recursiva para inverter uma lista.
+< //     (EXERCÍCIO: entender o que a função faz.)
+< void inverteR(no *head, no *tail) {
+<   if (*head == *tail) return;
+<   inverteR(&((*head)->prox), tail);
+<   (*tail)->prox = *head;
+<   *tail = *head;
+<   *head = (*head)->prox;
+<   (*tail)->prox = NULL;
+228c145
+< // 17. (EXERCÍCIO) Função recursiva para inverter uma lista
+---
+> // 16. (EXERCÍCIO) Função recursiva para inverter uma lista
+231,482c148
+< void inverteR2(no *head);
+< 
+< /****************************************************/
+< /****************************************************/
+< /****************************************************/
+< 
+< /*
+< void imprimir_teste(char * nome){
+<   printf("Testa %s\n", nome);
+< }
+< 
+< void testa_inverteR() {
+<   no head = NULL, tail;
+< 
+<   for (int i = 0; i < 10; i ++) {
+<     insere_inicio(&head, novo(i));
+<     if (i == 0)
+<       tail = head;
+<   }
+< 
+<   imprime(head);
+<   inverteR(&head, &tail);
+<   imprime(head);
+< }
+< 
+< void testa_final(){
+<   no inicio = NULL;
+< 
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+< 
+<   imprime(inicio);
+<   printf("%d\n", final(inicio)->item);
+< 
+< }
+< 
+< void testa_insere_final(){
+<   no inicio = NULL;
+< 
+<   printf("teste 1:\ninsere -1 em NULL:\n");
+<   no x1 = novo(-1);
+<   insere_final(&inicio, x1);
+<   imprime(inicio);
+< 
+<   printf("teste 2:\n");
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+<   printf("insere -2\n");
+<   no x2 = novo(-2);
+<   insere_final(&inicio, x2);
+<   imprime(inicio);
+< }
+< 
+< void testa_insere_finalR(){
+<   no inicio = NULL;
+< 
+<   printf("teste 1:\ninsere -1 em NULL:\n");
+<   no x1 = novo(-1);
+<   insere_finalR(&inicio, x1);
+<   imprime(inicio);
+< 
+<   printf("teste 2:\n");
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+<   printf("insere -2\n");
+<   no x2 = novo(-2);
+<   insere_finalR(&inicio, x2);
+<   imprime(inicio);
+< }
+< 
+< void testa_remove_um(){
+<   no inicio = NULL;
+<   printf("remove null\n");
+<   remove_um(&inicio, 3);
+< 
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+< 
+<   printf("remove 2 no meio\n");
+<   remove_um(&inicio, 2);
+<   imprime(inicio);
+< 
+<   printf("remove 9 no inicio\n");
+<   remove_um(&inicio, 9);
+<   imprime(inicio);
+< 
+<   printf("remove 0 no final\n");
+<   remove_um(&inicio, 0);
+<   imprime(inicio);
+< 
+<   printf("nao remove 10\n");
+<   remove_um(&inicio, 10);
+<   imprime(inicio);
+< }
+< 
+< void testa_remove_um_v1(){
+<   no inicio = NULL;
+<   printf("remove null\n");
+<   remove_um_v1(&inicio, 3);
+< 
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+< 
+<   printf("remove 2 no meio\n");
+<   remove_um_v1(&inicio, 2);
+<   imprime(inicio);
+< 
+<   printf("remove 9 no inicio\n");
+<   remove_um_v1(&inicio, 9);
+<   imprime(inicio);
+< 
+<   printf("remove 0 no final\n");
+<   remove_um_v1(&inicio, 0);
+<   imprime(inicio);
+< 
+<   printf("nao remove 10\n");
+<   remove_um_v1(&inicio, 10);
+<   imprime(inicio);
+< }
+< 
+< void testa_remove_todos(){
+<   no inicio = NULL;
+<   printf("remove null\n");
+<   remove_todos(&inicio, 3);
+< 
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   insere_inicio(&inicio, novo(9));
+<   for (int i = 0; i < 5; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+< 
+<   printf("remove 2\n");
+<   remove_todos(&inicio, 2);
+<   imprime(inicio);
+< 
+<   printf("remove 9\n");
+<   remove_todos(&inicio, 9);
+<   imprime(inicio);
+< 
+<   printf("remove 0\n");
+<   remove_todos(&inicio, 0);
+<   imprime(inicio);
+< 
+<   printf("nao remove 10\n");
+<   remove_todos(&inicio, 10);
+<   imprime(inicio);
+< }
+< 
+< void testa_remove_todosR(){
+<   no inicio = NULL;
+<   printf("remove null\n");
+<   remove_todosR(&inicio, 3);
+< 
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   insere_inicio(&inicio, novo(9));
+<   for (int i = 0; i < 5; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+< 
+<   printf("remove 2\n");
+<   remove_todosR(&inicio, 2);
+<   imprime(inicio);
+< 
+<   printf("remove 9\n");
+<   remove_todosR(&inicio, 9);
+<   imprime(inicio);
+< 
+<   printf("remove 0\n");
+<   remove_todosR(&inicio, 0);
+<   imprime(inicio);
+< 
+<   printf("nao remove 10\n");
+<   remove_todosR(&inicio, 10);
+<   imprime(inicio);
+< }
+< 
+< void testa_copia(){
+<   no inicio = NULL;
+< 
+<   printf("lista original NULL:\n");
+<   imprime(inicio);
+< 
+<   printf("copia NULL:\n");
+<   no cop1 = copia(inicio);
+<   imprime(cop1);
+< 
+<   printf("lista original:\n");
+<   for (int i = 0; i < 10; i++) {
+<     insere_inicio(&inicio, novo(i));
+<   }
+<   imprime(inicio);
+< 
+<   printf("copia:\n");
+<   no cop2 = copia(inicio);
+<   imprime(cop2);
+< }
+< 
+< int main() {
+<   imprimir_teste("inverteR");
+<   testa_inverteR();
+<   printf("\n");
+< 
+<   imprimir_teste("final");
+<   testa_final();
+<   printf("\n");
+< 
+<   imprimir_teste("insere_final");
+<   testa_insere_final();
+<   printf("\n");
+< 
+<   imprimir_teste("insere_finalR");
+<   testa_insere_finalR();
+<   printf("\n");
+< 
+<   imprimir_teste("remove_um");
+<   testa_remove_um();
+<   printf("\n");
+< 
+<   imprimir_teste("remove_um_v1");
+<   testa_remove_um_v1();
+<   printf("\n");
+< 
+<   imprimir_teste("remove_todos");
+<   testa_remove_todos();
+<   printf("\n");
+< 
+<   imprimir_teste("remove_todosR");
+<   testa_remove_todosR();
+<   printf("\n");
+< 
+<   imprimir_teste("copia");
+<   testa_copia();
+<   printf("\n");
+< 
+<   return 0;
+< }
+< */
+---
+> void inverteR2(no *ini);
