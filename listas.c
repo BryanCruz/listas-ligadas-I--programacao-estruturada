@@ -7,12 +7,36 @@
 //    para alocar muitos nós de uma vez e usar a lista
 //    livres para guardar os blocos que ainda não estão
 //    sendo usados. Como visto em sala...
-no novo(int item);
+no novo(int item){
+  if(livres == NULL){
+      int qtd = 1024;
+      no aux = (no) malloc(qtd*sizeof(struct s_no));
+
+      if(aux != NULL){
+          for(int i = 0; i < qtd; i++){
+              deleta(aux+i);
+          }
+      }else{
+          fprintf(stderr, "Erro: memória insuficiente para criar novos nos\n");
+          exit(1);
+      }
+  }
+  no x = livres;
+  livres = livres->prox;
+
+  x->item = item;
+  x->prox = NULL;
+
+  return x;
+}
 
 // 2. (EXERCÍCIO) Deleta um nó.
 //    Adaptar a função deleta para trabalhar
 //    com a lista de nós livres. Como visto em sala...
-void deleta(no x);
+void deleta(no x){
+  x->prox = livres;
+  livres = x;
+}
 
 // 3. Insere um nó no início da lista (como PUSH).
 //    (Supõem que x e ini são ambos diferentes de NULL.)
@@ -170,15 +194,37 @@ void inverte(no *ini) {
 // 16. (EXERCÍCIO) Função recursiva para inverter uma lista
 //     Agora só com o ponteiro para (o ponteiro para) o
 //     primeiro nó sendo passado como parâmetro.
-void inverteR2(no *ini);
+void inverteR2(no *ini){
+
+}
 
 /****************************************************/
 /****************************************************/
 /****************************************************/
 
-/*
+
 void imprimir_teste(char * nome){
   printf("Testa %s\n", nome);
+}
+
+void testa_novo_e_deleta(){
+  no lista = NULL;
+  int deuCerto = 1;
+  for(int i = 0; i < 30000 && deuCerto; i++){
+    no x = novo(i);
+    deuCerto = x->item == i;
+    insere_inicio(&lista, x);
+  }
+  printf("'novo' deu certo? %c\n", deuCerto? 's' : 'n');
+
+  while(lista != NULL){
+    no aux = lista->prox;
+    deleta(lista);
+    lista = aux;
+  }
+
+  deuCerto = lista == NULL;
+  printf("'deleta' deu certo? %c\n", deuCerto? 's' : 'n');
 }
 
 void testa_inverteR() {
@@ -192,6 +238,18 @@ void testa_inverteR() {
 
   imprime(head);
   inverteR(&head, &tail);
+  imprime(head);
+}
+
+void testa_inverteR2() {
+  no head = NULL;
+
+  for (int i = 0; i < 10; i ++) {
+    insere_inicio(&head, novo(i));
+  }
+
+  imprime(head);
+  inverteR2(&head);
   imprime(head);
 }
 
@@ -269,33 +327,6 @@ void testa_remove_um(){
 
   printf("nao remove 10\n");
   remove_um(&inicio, 10);
-  imprime(inicio);
-}
-
-void testa_remove_um_v1(){
-  no inicio = NULL;
-  printf("remove null\n");
-  remove_um_v1(&inicio, 3);
-
-  for (int i = 0; i < 10; i++) {
-    insere_inicio(&inicio, novo(i));
-  }
-  imprime(inicio);
-
-  printf("remove 2 no meio\n");
-  remove_um_v1(&inicio, 2);
-  imprime(inicio);
-
-  printf("remove 9 no inicio\n");
-  remove_um_v1(&inicio, 9);
-  imprime(inicio);
-
-  printf("remove 0 no final\n");
-  remove_um_v1(&inicio, 0);
-  imprime(inicio);
-
-  printf("nao remove 10\n");
-  remove_um_v1(&inicio, 10);
   imprime(inicio);
 }
 
@@ -387,6 +418,10 @@ int main() {
   testa_inverteR();
   printf("\n");
 
+  imprimir_teste("inverteR2");
+  testa_inverteR2();
+  printf("\n");
+
   imprimir_teste("final");
   testa_final();
   printf("\n");
@@ -403,10 +438,6 @@ int main() {
   testa_remove_um();
   printf("\n");
 
-  imprimir_teste("remove_um_v1");
-  testa_remove_um_v1();
-  printf("\n");
-
   imprimir_teste("remove_todos");
   testa_remove_todos();
   printf("\n");
@@ -421,4 +452,3 @@ int main() {
 
   return 0;
 }
-*/
